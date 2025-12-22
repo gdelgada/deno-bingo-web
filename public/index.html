@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta
+			name="description"
+			content="Bingo Master - A modern bingo drum simulator"
+		>
+		<title>Bingo Master - Drum Simulator</title>
+		<link rel="stylesheet" href="styles.css">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap"
+			rel="stylesheet"
+		>
+	</head>
+	<body>
+		<div class="particles" id="particles"></div>
+
+		<div class="container">
+			<!-- Header -->
+			<header class="header">
+				<h1 class="title">
+					<span class="title-icon">🎱</span>
+					BINGO MASTER
+					<span class="title-icon">🎱</span>
+				</h1>
+				<p class="subtitle">Professional Drum Simulator</p>
+			</header>
+
+			<!-- Setup Screen -->
+			<div id="setupScreen" class="setup-screen">
+				<div class="setup-card">
+					<h2>Setup New Game</h2>
+					<div class="input-group">
+						<label for="drumSize">Number of Balls</label>
+						<input
+							type="number"
+							id="drumSize"
+							value="90"
+							min="10"
+							max="200"
+							class="input-field"
+						>
+						<small>Choose between 10 and 200 balls</small>
+					</div>
+					<button id="startGameBtn" class="btn btn-primary btn-large">
+						<span class="btn-icon">🎮</span>
+						Start Game
+					</button>
+				</div>
+			</div>
+
+			<!-- Game Screen -->
+			<div id="gameScreen" class="game-screen" style="display: none">
+				<!-- Stats Bar -->
+				<div class="stats-bar">
+					<div class="stat-item">
+						<div class="stat-label">Called</div>
+						<div class="stat-value" id="calledCount">0</div>
+					</div>
+					<div class="stat-item">
+						<div class="stat-label">Remaining</div>
+						<div class="stat-value" id="remainingCount">90</div>
+					</div>
+					<div class="stat-item">
+						<div class="stat-label">Total</div>
+						<div class="stat-value" id="totalCount">90</div>
+					</div>
+				</div>
+
+				<!-- Latest Ball Display -->
+				<div class="latest-ball-container">
+					<div class="latest-ball-label">Latest Ball</div>
+					<div class="latest-ball" id="latestBall">
+						<span id="latestBallNumber">--</span>
+					</div>
+					<div class="ball-animation-trail" id="ballTrail"></div>
+				</div>
+
+				<!-- Progress Bar -->
+				<div class="progress-container">
+					<div class="progress-bar">
+						<div
+							class="progress-fill"
+							id="progressFill"
+							style="width: 0%"
+						>
+						</div>
+					</div>
+					<div class="progress-text" id="progressText">0%</div>
+				</div>
+
+				<!-- Board -->
+				<div class="board-container">
+					<h3 class="board-title">Number Board</h3>
+					<div class="board" id="board"></div>
+				</div>
+
+				<!-- Controls -->
+				<div class="controls">
+					<button id="nextBallBtn" class="btn btn-primary btn-large">
+						<span class="btn-icon">🎲</span>
+						Draw Next Ball
+					</button>
+					<button id="resetGameBtn" class="btn btn-secondary">
+						<span class="btn-icon">🔄</span>
+						New Game
+					</button>
+				</div>
+			</div>
+
+			<!-- Game Over Overlay -->
+			<div
+				id="gameOverOverlay"
+				class="game-over-overlay"
+				style="display: none"
+			>
+				<div class="game-over-card">
+					<h2 class="game-over-title">🎉 Game Completed! 🎉</h2>
+					<p class="game-over-message">
+						All balls have been called
+					</p>
+					<button id="newGameBtn" class="btn btn-primary btn-large">
+						<span class="btn-icon">🎮</span>
+						Play Again
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<script src="app.js"></script>
+	</body>
+</html>

@@ -1,0 +1,7 @@
+.vscode/launch.json
+
+.env
+*.jpg
+
+coverage/
+output/
