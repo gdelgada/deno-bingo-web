@@ -1,0 +1,15 @@
+name: Deno Deploy
+run-name: Deno Deploy
+on:
+  repository_dispatch:
+    types: [deno_deploy.build.routed] # Listen for successful builds
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test the preview_url
+        run: |
+          echo "The Deno Deploy app is available at ${{ github.event.client_payload.revision.preview_url }}"
+          curl -I ${{ github.event.client_payload.revision.preview_url }}
+
