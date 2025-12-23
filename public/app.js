@@ -196,7 +196,8 @@ function drawNextBall() {
 	// Disable button during animation
 	elements.nextBallBtn.disabled = true;
 	const drawingText = i18n.t('drawNextBall');
-	elements.nextBallBtn.innerHTML = `<span class="btn-icon">🎲</span> <span>${drawingText}...</span>`;
+	elements.nextBallBtn.innerHTML =
+		`<span class="btn-icon">🎲</span> <span>${drawingText}...</span>`;
 
 	// Simulate rolling animation
 	let rollCount = 0;
