@@ -31,6 +31,51 @@
 
 	--border-radius: 12px;
 	--transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+	--particle-color-1: rgba(102, 126, 234, 0.8);
+	--particle-color-2: rgba(118, 75, 162, 0.6);
+}
+
+/* Christmas Theme */
+body[data-theme='christmas'] {
+	--primary-gradient: linear-gradient(135deg, #c41e3a 0%, #165b33 100%);
+	--secondary-gradient: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+	--success-gradient: linear-gradient(135deg, #22c55e 0%, #86efac 100%);
+	--accent-gradient: linear-gradient(135deg, #ef4444 0%, #fbbf24 100%);
+
+	--bg-dark: #0f1419;
+	--bg-card: #1a2332;
+	--bg-lighter: #2d3e50;
+
+	--ball-called: linear-gradient(135deg, #22c55e 0%, #10b981 100%);
+	--ball-uncalled: #374151;
+	--ball-latest: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+
+	--shadow-glow: 0 0 20px rgba(220, 38, 38, 0.4);
+
+	--particle-color-1: rgba(220, 38, 38, 0.8);
+	--particle-color-2: rgba(34, 197, 94, 0.6);
+}
+
+/* Summer Theme */
+body[data-theme='summer'] {
+	--primary-gradient: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+	--secondary-gradient: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+	--success-gradient: linear-gradient(135deg, #14b8a6 0%, #06b6d4 100%);
+	--accent-gradient: linear-gradient(135deg, #f97316 0%, #fbbf24 100%);
+
+	--bg-dark: #082f49;
+	--bg-card: #0c4a6e;
+	--bg-lighter: #075985;
+
+	--ball-called: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+	--ball-uncalled: #334155;
+	--ball-latest: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+
+	--shadow-glow: 0 0 20px rgba(6, 182, 212, 0.4);
+
+	--particle-color-1: rgba(6, 182, 212, 0.8);
+	--particle-color-2: rgba(251, 191, 36, 0.6);
 }
 
 body {
@@ -61,7 +106,7 @@ body {
 	height: 4px;
 	background: radial-gradient(
 		circle,
-		rgba(102, 126, 234, 0.8) 0%,
+		var(--particle-color-1) 0%,
 		transparent 70%
 	);
 	border-radius: 50%;
@@ -188,6 +233,25 @@ body {
 	outline: none;
 	border-color: #667eea;
 	box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+.input-field[type="number"] {
+	cursor: text;
+}
+
+select.input-field {
+	cursor: pointer;
+	appearance: none;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a0aec0' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 1rem center;
+	padding-right: 2.5rem;
+}
+
+select.input-field option {
+	background: var(--bg-card);
+	color: var(--text-primary);
+	padding: 0.5rem;
 }
 
 .input-group small {
