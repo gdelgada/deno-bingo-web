@@ -89,14 +89,14 @@ body {
 }
 
 /* Christmas theme background */
-body[data-theme="christmas"] {
+body[data-theme='christmas'] {
 	background-image: url('christmas-bg.png');
 	background-size: 1000px 1000px;
 	background-repeat: repeat;
 	background-attachment: fixed;
 }
 
-body[data-theme="christmas"]::before {
+body[data-theme='christmas']::before {
 	content: '';
 	position: fixed;
 	top: 0;
@@ -109,14 +109,14 @@ body[data-theme="christmas"]::before {
 }
 
 /* Summer theme background */
-body[data-theme="summer"] {
+body[data-theme='summer'] {
 	background-image: url('summer-bg.png');
 	background-size: 1000px 1000px;
 	background-repeat: repeat;
 	background-attachment: fixed;
 }
 
-body[data-theme="summer"]::before {
+body[data-theme='summer']::before {
 	content: '';
 	position: fixed;
 	top: 0;
@@ -275,7 +275,7 @@ body[data-theme="summer"]::before {
 	box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
 }
 
-.input-field[type="number"] {
+.input-field[type='number'] {
 	cursor: text;
 }
 
