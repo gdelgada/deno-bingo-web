@@ -4,6 +4,7 @@ const gameState = {
 	lastBall: null,
 	drumSize: 90,
 	isGameActive: false,
+	theme: 'default',
 };
 
 // ==================== DRUM LOGIC (Mirroring drum.ts) ====================
@@ -35,6 +36,8 @@ function getRandomIndex(array) {
 const elements = {
 	setupScreen: document.getElementById('setupScreen'),
 	gameScreen: document.getElementById('gameScreen'),
+	languageSelect: document.getElementById('languageSelect'),
+	gameThemeSelect: document.getElementById('gameTheme'),
 	drumSizeInput: document.getElementById('drumSize'),
 	startGameBtn: document.getElementById('startGameBtn'),
 	board: document.getElementById('board'),
@@ -153,16 +156,24 @@ function triggerConfetti() {
 // ==================== GAME LOGIC ====================
 function startGame() {
 	const drumSize = parseInt(elements.drumSizeInput.value, 10);
+	const selectedTheme = elements.gameThemeSelect.value;
 
 	if (isNaN(drumSize) || drumSize < 10 || drumSize > 200) {
-		alert('Please enter a valid number between 10 and 200');
+		const errorMsg = i18n.currentLanguage === 'es'
+			? 'Por favor, ingresa un número válido entre 10 y 200'
+			: 'Please enter a valid number between 10 and 200';
+		alert(errorMsg);
 		return;
 	}
 
 	gameState.drumSize = drumSize;
+	gameState.theme = selectedTheme;
 	gameState.drum = createDrum(drumSize);
 	gameState.lastBall = null;
 	gameState.isGameActive = true;
+
+	// Apply theme to body
+	document.body.setAttribute('data-theme', selectedTheme);
 
 	// Switch screens with animation
 	elements.setupScreen.style.display = 'none';
@@ -184,7 +195,9 @@ function drawNextBall() {
 
 	// Disable button during animation
 	elements.nextBallBtn.disabled = true;
-	elements.nextBallBtn.textContent = '🎲 Drawing...';
+	const drawingText = i18n.t('drawNextBall');
+	elements.nextBallBtn.innerHTML =
+		`<span class="btn-icon">🎲</span> <span>${drawingText}...</span>`;
 
 	// Simulate rolling animation
 	let rollCount = 0;
@@ -209,8 +222,9 @@ function drawNextBall() {
 
 			// Re-enable button
 			elements.nextBallBtn.disabled = false;
+			const drawText = i18n.t('drawNextBall');
 			elements.nextBallBtn.innerHTML =
-				'<span class="btn-icon">🎲</span> Draw Next Ball';
+				`<span class="btn-icon">🎲</span> <span data-i18n="drawNextBall">${drawText}</span>`;
 
 			// Check if game is over
 			if (getFalsePositions(gameState.drum).length === 0) {
@@ -231,6 +245,8 @@ function resetGame() {
 	elements.gameScreen.style.display = 'none';
 	elements.setupScreen.style.display = 'block';
 	elements.gameOverOverlay.style.display = 'none';
+	// Reset theme to default when going back to setup
+	document.body.setAttribute('data-theme', 'default');
 }
 
 // ==================== EVENT LISTENERS ====================
@@ -238,6 +254,11 @@ elements.startGameBtn.addEventListener('click', startGame);
 elements.nextBallBtn.addEventListener('click', drawNextBall);
 elements.resetGameBtn.addEventListener('click', resetGame);
 elements.newGameBtn.addEventListener('click', resetGame);
+
+// Language change handler
+elements.languageSelect.addEventListener('change', (e) => {
+	i18n.setLanguage(e.target.value);
+});
 
 // Allow Enter key to start game from setup screen
 elements.drumSizeInput.addEventListener('keypress', (e) => {
@@ -258,5 +279,10 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ==================== INITIALIZATION ====================
+// Initialize i18n system
+if (typeof i18n !== 'undefined') {
+	i18n.init();
+}
+
 createParticles();
 console.log('🎱 Bingo Master initialized!');
