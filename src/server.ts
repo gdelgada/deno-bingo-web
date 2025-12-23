@@ -6,7 +6,7 @@ const PORT = 8000;
 // Get the directory where this server file is located (Windows-safe)
 const serverDir = dirname(fromFileUrl(import.meta.url));
 // Public directory is at the root of the project
-const publicDir = join(serverDir, 'public');
+const publicDir = Deno.env.get('PUBLIC_DIR') || join(serverDir, '../public');
 
 console.log(`🎱 Bingo Master Web Server`);
 console.log(`🌐 Server running at http://localhost:${PORT}/`);
