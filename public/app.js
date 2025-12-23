@@ -4,6 +4,7 @@ const gameState = {
 	lastBall: null,
 	drumSize: 90,
 	isGameActive: false,
+	theme: 'default',
 };
 
 // ==================== DRUM LOGIC (Mirroring drum.ts) ====================
@@ -35,6 +36,7 @@ function getRandomIndex(array) {
 const elements = {
 	setupScreen: document.getElementById('setupScreen'),
 	gameScreen: document.getElementById('gameScreen'),
+	gameThemeSelect: document.getElementById('gameTheme'),
 	drumSizeInput: document.getElementById('drumSize'),
 	startGameBtn: document.getElementById('startGameBtn'),
 	board: document.getElementById('board'),
@@ -153,6 +155,7 @@ function triggerConfetti() {
 // ==================== GAME LOGIC ====================
 function startGame() {
 	const drumSize = parseInt(elements.drumSizeInput.value, 10);
+	const selectedTheme = elements.gameThemeSelect.value;
 
 	if (isNaN(drumSize) || drumSize < 10 || drumSize > 200) {
 		alert('Please enter a valid number between 10 and 200');
@@ -160,9 +163,13 @@ function startGame() {
 	}
 
 	gameState.drumSize = drumSize;
+	gameState.theme = selectedTheme;
 	gameState.drum = createDrum(drumSize);
 	gameState.lastBall = null;
 	gameState.isGameActive = true;
+
+	// Apply theme to body
+	document.body.setAttribute('data-theme', selectedTheme);
 
 	// Switch screens with animation
 	elements.setupScreen.style.display = 'none';
@@ -231,6 +238,8 @@ function resetGame() {
 	elements.gameScreen.style.display = 'none';
 	elements.setupScreen.style.display = 'block';
 	elements.gameOverOverlay.style.display = 'none';
+	// Reset theme to default when going back to setup
+	document.body.setAttribute('data-theme', 'default');
 }
 
 // ==================== EVENT LISTENERS ====================
