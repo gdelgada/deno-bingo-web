@@ -88,6 +88,46 @@ body {
 	position: relative;
 }
 
+/* Christmas theme background */
+body[data-theme="christmas"] {
+	background-image: url('christmas-bg.png');
+	background-size: 1000px 1000px;
+	background-repeat: repeat;
+	background-attachment: fixed;
+}
+
+body[data-theme="christmas"]::before {
+	content: '';
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(15, 20, 25, 0.85);
+	z-index: 0;
+	pointer-events: none;
+}
+
+/* Summer theme background */
+body[data-theme="summer"] {
+	background-image: url('summer-bg.png');
+	background-size: 1000px 1000px;
+	background-repeat: repeat;
+	background-attachment: fixed;
+}
+
+body[data-theme="summer"]::before {
+	content: '';
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(8, 47, 73, 0.80);
+	z-index: 0;
+	pointer-events: none;
+}
+
 /* ==================== PARTICLES BACKGROUND ==================== */
 .particles {
 	position: fixed;
