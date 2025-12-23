@@ -24,29 +24,36 @@
 			<header class="header">
 				<h1 class="title">
 					<span class="title-icon">🎱</span>
-					BINGO MASTER
+					<span data-i18n="title">BINGO MASTER</span>
 					<span class="title-icon">🎱</span>
 				</h1>
-				<p class="subtitle">Professional Drum Simulator</p>
+				<p class="subtitle" data-i18n="subtitle">Professional Drum Simulator</p>
 			</header>
 
 			<!-- Setup Screen -->
 			<div id="setupScreen" class="setup-screen">
 				<div class="setup-card">
-					<h2>Setup New Game</h2>
+					<h2 data-i18n="setupTitle">Setup New Game</h2>
 					<div class="input-group">
-						<label for="gameTheme">Game Theme</label>
-						<select id="gameTheme" class="input-field">
-							<option value="default">🎱 Default Theme</option>
-							<option value="christmas">
-								🎄 Christmas Theme
-							</option>
-							<option value="summer">🏖️ Summer Theme</option>
+						<label for="languageSelect" data-i18n="languageLabel">Language</label>
+						<select id="languageSelect" class="input-field">
+							<option value="en">🇬🇧 English</option>
+							<option value="es">🇪🇸 Español</option>
 						</select>
-						<small>Choose your favorite theme</small>
 					</div>
 					<div class="input-group">
-						<label for="drumSize">Number of Balls</label>
+						<label for="gameTheme" data-i18n="gameThemeLabel">Game Theme</label>
+						<select id="gameTheme" class="input-field">
+							<option value="default" data-i18n="defaultTheme">🎱 Default Theme</option>
+							<option value="christmas" data-i18n="christmasTheme">
+								🎄 Christmas Theme
+							</option>
+							<option value="summer" data-i18n="summerTheme">🏖️ Summer Theme</option>
+						</select>
+						<small data-i18n="themeHint">Choose your favorite theme</small>
+					</div>
+					<div class="input-group">
+						<label for="drumSize" data-i18n="numberOfBallsLabel">Number of Balls</label>
 						<input
 							type="number"
 							id="drumSize"
@@ -55,11 +62,11 @@
 							max="200"
 							class="input-field"
 						>
-						<small>Choose between 10 and 200 balls</small>
+						<small data-i18n="ballsHint">Choose between 10 and 200 balls</small>
 					</div>
 					<button id="startGameBtn" class="btn btn-primary btn-large">
 						<span class="btn-icon">🎮</span>
-						Start Game
+						<span data-i18n="startGame">Start Game</span>
 					</button>
 				</div>
 			</div>
@@ -69,22 +76,22 @@
 				<!-- Stats Bar -->
 				<div class="stats-bar">
 					<div class="stat-item">
-						<div class="stat-label">Called</div>
+						<div class="stat-label" data-i18n="called">Called</div>
 						<div class="stat-value" id="calledCount">0</div>
 					</div>
 					<div class="stat-item">
-						<div class="stat-label">Remaining</div>
+						<div class="stat-label" data-i18n="remaining">Remaining</div>
 						<div class="stat-value" id="remainingCount">90</div>
 					</div>
 					<div class="stat-item">
-						<div class="stat-label">Total</div>
+						<div class="stat-label" data-i18n="total">Total</div>
 						<div class="stat-value" id="totalCount">90</div>
 					</div>
 				</div>
 
 				<!-- Latest Ball Display -->
 				<div class="latest-ball-container">
-					<div class="latest-ball-label">Latest Ball</div>
+					<div class="latest-ball-label" data-i18n="latestBall">Latest Ball</div>
 					<div class="latest-ball" id="latestBall">
 						<span id="latestBallNumber">--</span>
 					</div>
@@ -106,7 +113,7 @@
 
 				<!-- Board -->
 				<div class="board-container">
-					<h3 class="board-title">Number Board</h3>
+					<h3 class="board-title" data-i18n="numberBoard">Number Board</h3>
 					<div class="board" id="board"></div>
 				</div>
 
@@ -114,11 +121,11 @@
 				<div class="controls">
 					<button id="nextBallBtn" class="btn btn-primary btn-large">
 						<span class="btn-icon">🎲</span>
-						Draw Next Ball
+						<span data-i18n="drawNextBall">Draw Next Ball</span>
 					</button>
 					<button id="resetGameBtn" class="btn btn-secondary">
 						<span class="btn-icon">🔄</span>
-						New Game
+						<span data-i18n="newGame">New Game</span>
 					</button>
 				</div>
 			</div>
@@ -130,18 +137,19 @@
 				style="display: none"
 			>
 				<div class="game-over-card">
-					<h2 class="game-over-title">🎉 Game Completed! 🎉</h2>
-					<p class="game-over-message">
+					<h2 class="game-over-title" data-i18n="gameCompleted">🎉 Game Completed! 🎉</h2>
+					<p class="game-over-message" data-i18n="allBallsCalled">
 						All balls have been called
 					</p>
 					<button id="newGameBtn" class="btn btn-primary btn-large">
 						<span class="btn-icon">🎮</span>
-						Play Again
+						<span data-i18n="playAgain">Play Again</span>
 					</button>
 				</div>
 			</div>
 		</div>
 
+		<script src="i18n.js"></script>
 		<script src="app.js"></script>
 	</body>
 </html>

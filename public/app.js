@@ -36,6 +36,7 @@ function getRandomIndex(array) {
 const elements = {
 	setupScreen: document.getElementById('setupScreen'),
 	gameScreen: document.getElementById('gameScreen'),
+	languageSelect: document.getElementById('languageSelect'),
 	gameThemeSelect: document.getElementById('gameTheme'),
 	drumSizeInput: document.getElementById('drumSize'),
 	startGameBtn: document.getElementById('startGameBtn'),
@@ -158,7 +159,10 @@ function startGame() {
 	const selectedTheme = elements.gameThemeSelect.value;
 
 	if (isNaN(drumSize) || drumSize < 10 || drumSize > 200) {
-		alert('Please enter a valid number between 10 and 200');
+		const errorMsg = i18n.currentLanguage === 'es'
+			? 'Por favor, ingresa un número válido entre 10 y 200'
+			: 'Please enter a valid number between 10 and 200';
+		alert(errorMsg);
 		return;
 	}
 
@@ -191,7 +195,8 @@ function drawNextBall() {
 
 	// Disable button during animation
 	elements.nextBallBtn.disabled = true;
-	elements.nextBallBtn.textContent = '🎲 Drawing...';
+	const drawingText = i18n.t('drawNextBall');
+	elements.nextBallBtn.innerHTML = `<span class="btn-icon">🎲</span> <span>${drawingText}...</span>`;
 
 	// Simulate rolling animation
 	let rollCount = 0;
@@ -216,8 +221,9 @@ function drawNextBall() {
 
 			// Re-enable button
 			elements.nextBallBtn.disabled = false;
+			const drawText = i18n.t('drawNextBall');
 			elements.nextBallBtn.innerHTML =
-				'<span class="btn-icon">🎲</span> Draw Next Ball';
+				`<span class="btn-icon">🎲</span> <span data-i18n="drawNextBall">${drawText}</span>`;
 
 			// Check if game is over
 			if (getFalsePositions(gameState.drum).length === 0) {
@@ -248,6 +254,11 @@ elements.nextBallBtn.addEventListener('click', drawNextBall);
 elements.resetGameBtn.addEventListener('click', resetGame);
 elements.newGameBtn.addEventListener('click', resetGame);
 
+// Language change handler
+elements.languageSelect.addEventListener('change', (e) => {
+	i18n.setLanguage(e.target.value);
+});
+
 // Allow Enter key to start game from setup screen
 elements.drumSizeInput.addEventListener('keypress', (e) => {
 	if (e.key === 'Enter') {
@@ -267,5 +278,10 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ==================== INITIALIZATION ====================
+// Initialize i18n system
+if (typeof i18n !== 'undefined') {
+	i18n.init();
+}
+
 createParticles();
 console.log('🎱 Bingo Master initialized!');
