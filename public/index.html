@@ -33,10 +33,94 @@
 				</p>
 			</header>
 
-			<!-- Setup Screen -->
-			<div id="setupScreen" class="setup-screen">
+			<!-- Welcome Screen -->
+			<div id="welcomeScreen" class="setup-screen">
 				<div class="setup-card">
-					<h2 data-i18n="setupTitle">Setup New Game</h2>
+					<h2 data-i18n="welcomeTitle">Welcome</h2>
+					<p
+						class="subtitle"
+						style="margin-bottom: 2rem; opacity: 0.8"
+						data-i18n="selectMode"
+					>
+						Select a game mode
+					</p>
+
+					<div
+						class="mode-selection"
+						style="display: flex; flex-direction: column; gap: 1rem; width: 100%"
+					>
+						<button
+							id="hostGameBtn"
+							class="btn btn-primary btn-large"
+						>
+							<span class="btn-icon">👑</span>
+							<span data-i18n="hostGame">Host Game</span>
+						</button>
+						<button
+							id="joinGameMenuBtn"
+							class="btn btn-secondary btn-large"
+						>
+							<span class="btn-icon">📱</span>
+							<span data-i18n="joinGame">Join Game</span>
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- Join Screen -->
+			<div id="joinScreen" class="setup-screen" style="display: none">
+				<div class="setup-card">
+					<h2 data-i18n="joinGameTitle">Join Game</h2>
+					<div class="input-group">
+						<label for="roomCodeInput" data-i18n="roomCodeLabel"
+						>Room Code</label>
+						<input
+							type="text"
+							id="roomCodeInput"
+							class="input-field"
+							placeholder="ABCD"
+							maxlength="4"
+							style="text-transform: uppercase; letter-spacing: 5px; text-align: center; font-size: 2rem; font-weight: bold"
+						>
+					</div>
+					<button id="joinRoomBtn" class="btn btn-primary btn-large">
+						<span class="btn-icon">🚀</span>
+						<span data-i18n="joinBtn">Join</span>
+					</button>
+					<button
+						id="backToWelcomeBtn"
+						class="btn btn-text"
+						style="margin-top: 1rem"
+					>
+						<span data-i18n="back">Back</span>
+					</button>
+				</div>
+			</div>
+
+			<!-- Setup Screen -->
+			<div id="setupScreen" class="setup-screen" style="display: none">
+				<div class="setup-card">
+					<div
+						class="setup-header"
+						style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 1rem"
+					>
+						<button
+							id="backFromSetupBtn"
+							class="btn-icon-only"
+							aria-label="Back"
+						>
+							←
+						</button>
+						<h2
+							data-i18n="setupTitle"
+							style="margin: 0; flex-grow: 1; text-align: center"
+						>
+							Setup New Game
+						</h2>
+						<div style="width: 40px"></div>
+						<!-- Spacer for alignment -->
+					</div>
+
 					<div class="input-group">
 						<label for="languageSelect" data-i18n="languageLabel"
 						>Language</label>
@@ -88,6 +172,24 @@
 
 			<!-- Game Screen -->
 			<div id="gameScreen" class="game-screen" style="display: none">
+				<!-- Room Code Badge -->
+				<div
+					id="roomCodeDisplay"
+					class="room-code-badge"
+					style="display: none; background: rgba(255, 255, 255, 0.1); padding: 0.5rem 1rem; border-radius: 20px; text-align: center; margin-bottom: 1rem; font-size: 1.2rem; border: 1px solid rgba(255, 255, 255, 0.2)"
+				>
+					<span data-i18n="roomCode">Room Code</span>: <strong
+						id="currentRoomCode"
+						style="letter-spacing: 2px; color: var(--accent-color)"
+					>----</strong>
+					<div
+						style="font-size: 0.8rem; opacity: 0.7"
+						data-i18n="shareCode"
+					>
+						Share this code with players
+					</div>
+				</div>
+
 				<!-- Stats Bar -->
 				<div class="stats-bar">
 					<div class="stat-item">

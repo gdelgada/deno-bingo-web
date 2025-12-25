@@ -5,6 +5,9 @@ const gameState = {
 	drumSize: 90,
 	isGameActive: false,
 	theme: 'default',
+	ws: null,
+	roomId: null,
+	isHost: false,
 };
 
 // ==================== DRUM LOGIC (Mirroring drum.ts) ====================
@@ -34,12 +37,29 @@ function getRandomIndex(array) {
 
 // ==================== UI ELEMENTS ====================
 const elements = {
+	welcomeScreen: document.getElementById('welcomeScreen'),
+	joinScreen: document.getElementById('joinScreen'),
 	setupScreen: document.getElementById('setupScreen'),
 	gameScreen: document.getElementById('gameScreen'),
+
+	// Buttons
+	hostGameBtn: document.getElementById('hostGameBtn'),
+	joinGameMenuBtn: document.getElementById('joinGameMenuBtn'),
+	joinRoomBtn: document.getElementById('joinRoomBtn'),
+	backToWelcomeBtn: document.getElementById('backToWelcomeBtn'),
+	backFromSetupBtn: document.getElementById('backFromSetupBtn'),
+	startGameBtn: document.getElementById('startGameBtn'),
+	nextBallBtn: document.getElementById('nextBallBtn'),
+	resetGameBtn: document.getElementById('resetGameBtn'),
+	newGameBtn: document.getElementById('newGameBtn'),
+
+	// Inputs
 	languageSelect: document.getElementById('languageSelect'),
 	gameThemeSelect: document.getElementById('gameTheme'),
 	drumSizeInput: document.getElementById('drumSize'),
-	startGameBtn: document.getElementById('startGameBtn'),
+	roomCodeInput: document.getElementById('roomCodeInput'),
+
+	// Displays
 	board: document.getElementById('board'),
 	latestBallNumber: document.getElementById('latestBallNumber'),
 	calledCount: document.getElementById('calledCount'),
@@ -47,11 +67,116 @@ const elements = {
 	totalCount: document.getElementById('totalCount'),
 	progressFill: document.getElementById('progressFill'),
 	progressText: document.getElementById('progressText'),
-	nextBallBtn: document.getElementById('nextBallBtn'),
-	resetGameBtn: document.getElementById('resetGameBtn'),
 	gameOverOverlay: document.getElementById('gameOverOverlay'),
-	newGameBtn: document.getElementById('newGameBtn'),
+	roomCodeDisplay: document.getElementById('roomCodeDisplay'),
+	currentRoomCode: document.getElementById('currentRoomCode'),
+	controls: document.querySelector('.controls'),
 };
+
+// ==================== WEBSOCKET LOGIC ====================
+function connectWebSocket() {
+	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+	const url = `${protocol}//${window.location.host}`;
+
+	gameState.ws = new WebSocket(url);
+
+	gameState.ws.onopen = () => {
+		console.log('Connected to WebSocket');
+		if (gameState.isHost) {
+			gameState.ws.send(JSON.stringify({ type: 'CREATE_ROOM' }));
+		} else {
+			const code = elements.roomCodeInput.value.toUpperCase();
+			gameState.ws.send(
+				JSON.stringify({ type: 'JOIN_ROOM', roomId: code }),
+			);
+		}
+	};
+
+	gameState.ws.onmessage = (event) => {
+		const data = JSON.parse(event.data);
+		handleWebSocketMessage(data);
+	};
+
+	gameState.ws.onclose = () => {
+		console.log('Disconnected from WebSocket');
+		// Handle reconnection or show error?
+	};
+}
+
+function handleWebSocketMessage(data) {
+	switch (data.type) {
+		case 'ROOM_CREATED':
+			gameState.roomId = data.roomId;
+			updateRoomCodeDisplay();
+			break;
+		case 'JOINED_ROOM':
+			gameState.roomId = data.roomId;
+			enterSpectatorMode();
+			break;
+		case 'GAME_UPDATE':
+			updateGameStateFromHost(data.payload);
+			break;
+		case 'PLAYER_JOINED':
+			// New player joined, send current state
+			broadcastGameState();
+			break;
+		case 'HOST_DISCONNECTED':
+			alert('Host disconnected');
+			window.location.reload();
+			break;
+		case 'ERROR':
+			alert(data.message);
+			gameState.ws.close();
+			break;
+	}
+}
+
+function broadcastGameState() {
+	if (
+		gameState.ws && gameState.ws.readyState === WebSocket.OPEN &&
+		gameState.isHost
+	) {
+		gameState.ws.send(JSON.stringify({
+			type: 'GAME_UPDATE',
+			payload: {
+				drum: gameState.drum,
+				lastBall: gameState.lastBall,
+				drumSize: gameState.drumSize,
+				isGameActive: gameState.isGameActive,
+				theme: gameState.theme,
+			},
+		}));
+	}
+}
+
+function updateGameStateFromHost(payload) {
+	gameState.drum = payload.drum;
+	gameState.lastBall = payload.lastBall;
+	gameState.drumSize = payload.drumSize;
+	gameState.isGameActive = payload.isGameActive;
+
+	// If theme changed, update it
+	if (gameState.theme !== payload.theme) {
+		gameState.theme = payload.theme;
+		document.body.setAttribute('data-theme', payload.theme);
+	}
+
+	renderBoard();
+	updateStats();
+
+	if (!payload.isGameActive && getFalsePositions(payload.drum).length === 0) {
+		gameOver();
+	}
+}
+
+function updateRoomCodeDisplay() {
+	if (gameState.roomId) {
+		elements.roomCodeDisplay.style.display = 'block';
+		elements.currentRoomCode.textContent = gameState.roomId;
+	} else {
+		elements.roomCodeDisplay.style.display = 'none';
+	}
+}
 
 // ==================== PARTICLE ANIMATION ====================
 function createParticles() {
@@ -107,7 +232,13 @@ function updateStats() {
 	if (gameState.lastBall !== null) {
 		elements.latestBallNumber.textContent = gameState.lastBall;
 	} else {
-		elements.latestBallNumber.textContent = '--';
+		// If waiting for host (spectator mode and no ball yet)
+		if (!gameState.isHost && gameState.drum.every((v) => !v)) {
+			elements.latestBallNumber.innerHTML =
+				'<span style="font-size: 1rem; opacity: 0.7;">...</span>';
+		} else {
+			elements.latestBallNumber.textContent = '--';
+		}
 	}
 }
 
@@ -153,10 +284,24 @@ function triggerConfetti() {
 	}
 }
 
-// ==================== GAME LOGIC ====================
-function startGame() {
+// ==================== GAME FLOW LOGIC ====================
+function showScreen(screenId) {
+	['welcomeScreen', 'joinScreen', 'setupScreen', 'gameScreen'].forEach(
+		(id) => {
+			document.getElementById(id).style.display = 'none';
+		},
+	);
+	document.getElementById(screenId).style.display = screenId === 'gameScreen'
+		? 'block'
+		: 'flex';
+	if (screenId === 'gameScreen') {
+		document.getElementById(screenId).style.display = 'block'; // Override flex
+	}
+}
+
+function startGameHost() {
 	const drumSize = parseInt(elements.drumSizeInput.value, 10);
-	const selectedTheme = elements.gameThemeSelect.value;
+	const selectedTheme = elements.gameThemeSelect.value; // Get theme from select
 
 	if (isNaN(drumSize) || drumSize < 10 || drumSize > 200) {
 		const errorMsg = i18n.currentLanguage === 'es'
@@ -171,14 +316,29 @@ function startGame() {
 	gameState.drum = createDrum(drumSize);
 	gameState.lastBall = null;
 	gameState.isGameActive = true;
+	gameState.isHost = true;
 
 	// Apply theme to body
 	document.body.setAttribute('data-theme', selectedTheme);
 
-	// Switch screens with animation
-	elements.setupScreen.style.display = 'none';
-	elements.gameScreen.style.display = 'block';
+	showScreen('gameScreen');
+	elements.controls.style.display = 'flex'; // Show controls
 
+	renderBoard();
+	updateStats();
+
+	connectWebSocket(); // Connect and create room
+}
+
+function enterSpectatorMode() {
+	gameState.isHost = false;
+	showScreen('gameScreen');
+	elements.controls.style.display = 'none'; // Hide controls
+	elements.roomCodeDisplay.style.display = 'none'; // Hide room code badge for spectator? Or show it?
+	// Let's show it so they can verify they are in the right room, or share it too
+	updateRoomCodeDisplay();
+
+	// Initial empty render until update arrives
 	renderBoard();
 	updateStats();
 }
@@ -220,6 +380,9 @@ function drawNextBall() {
 			renderBoard();
 			updateStats();
 
+			// Broadcast update
+			broadcastGameState();
+
 			// Re-enable button
 			elements.nextBallBtn.disabled = false;
 			const drawText = i18n.t('drawNextBall');
@@ -238,19 +401,43 @@ function gameOver() {
 	gameState.isGameActive = false;
 	elements.gameOverOverlay.style.display = 'flex';
 	triggerConfetti();
+	if (gameState.isHost) {
+		broadcastGameState();
+	}
 }
 
 function resetGame() {
-	gameState.isGameActive = false;
-	elements.gameScreen.style.display = 'none';
-	elements.setupScreen.style.display = 'block';
-	elements.gameOverOverlay.style.display = 'none';
-	// Reset theme to default when going back to setup
-	document.body.setAttribute('data-theme', 'default');
+	// Only Host can reset properly to NEW GAME setup
+	// But let's just reload for now, simpler
+	if (gameState.ws) gameState.ws.close();
+	window.location.reload();
 }
 
 // ==================== EVENT LISTENERS ====================
-elements.startGameBtn.addEventListener('click', startGame);
+// Navigation
+elements.hostGameBtn.addEventListener('click', () => showScreen('setupScreen'));
+elements.joinGameMenuBtn.addEventListener(
+	'click',
+	() => showScreen('joinScreen'),
+);
+elements.backToWelcomeBtn.addEventListener(
+	'click',
+	() => showScreen('welcomeScreen'),
+);
+elements.backFromSetupBtn.addEventListener(
+	'click',
+	() => showScreen('welcomeScreen'),
+);
+
+// Actions
+elements.startGameBtn.addEventListener('click', startGameHost);
+elements.joinRoomBtn.addEventListener('click', () => {
+	if (elements.roomCodeInput.value.length === 4) {
+		gameState.isHost = false;
+		connectWebSocket();
+	}
+});
+
 elements.nextBallBtn.addEventListener('click', drawNextBall);
 elements.resetGameBtn.addEventListener('click', resetGame);
 elements.newGameBtn.addEventListener('click', resetGame);
@@ -260,16 +447,21 @@ elements.languageSelect.addEventListener('change', (e) => {
 	i18n.setLanguage(e.target.value);
 });
 
-// Allow Enter key to start game from setup screen
+// Allow Enter key to start/join
 elements.drumSizeInput.addEventListener('keypress', (e) => {
-	if (e.key === 'Enter') {
-		startGame();
+	if (e.key === 'Enter') startGameHost();
+});
+elements.roomCodeInput.addEventListener('keypress', (e) => {
+	if (e.key === 'Enter' && elements.roomCodeInput.value.length === 4) {
+		gameState.isHost = false;
+		connectWebSocket();
 	}
 });
 
-// Allow spacebar to draw next ball during game
+// Allow spacebar to draw next ball during game (HOST ONLY)
 document.addEventListener('keydown', (e) => {
 	if (
+		gameState.isHost &&
 		gameState.isGameActive && e.code === 'Space' &&
 		!elements.nextBallBtn.disabled
 	) {

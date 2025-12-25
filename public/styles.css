@@ -784,3 +784,44 @@ select.input-field option {
 		grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
 	}
 }
+
+/* ==================== NEW UI ELEMENTS ==================== */
+.btn-icon-only {
+	background: none;
+	border: none;
+	color: var(--text-secondary);
+	font-size: 1.5rem;
+	cursor: pointer;
+	padding: 0.5rem;
+	border-radius: 50%;
+	transition: var(--transition);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.btn-icon-only:hover {
+	background: rgba(255, 255, 255, 0.1);
+	color: var(--text-primary);
+	transform: scale(1.1);
+}
+
+.room-code-badge {
+	animation: fadeInDown 0.6s ease-out;
+}
+
+.btn-text {
+	background: none;
+	border: none;
+	color: var(--text-secondary);
+	font-size: 1rem;
+	cursor: pointer;
+	text-decoration: underline;
+	opacity: 0.8;
+	transition: var(--transition);
+}
+
+.btn-text:hover {
+	color: var(--text-primary);
+	opacity: 1;
+}

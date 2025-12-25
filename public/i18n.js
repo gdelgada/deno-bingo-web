@@ -5,6 +5,18 @@ const translations = {
 		title: 'BINGO MASTER',
 		subtitle: 'Professional Drum Simulator',
 
+		// Welcome Screen
+		welcomeTitle: 'Welcome to Bingo Master',
+		selectMode: 'Select a game mode',
+		hostGame: 'Host Game',
+		joinGame: 'Join Game',
+
+		// Join Screen
+		joinGameTitle: 'Join Game',
+		roomCodeLabel: 'Room Code',
+		joinBtn: 'Join',
+		back: 'Back',
+
 		// Setup Screen
 		setupTitle: 'Setup New Game',
 		languageLabel: 'Language',
@@ -27,6 +39,9 @@ const translations = {
 
 		// Game Screen - Board
 		numberBoard: 'Number Board',
+		roomCode: 'Room Code',
+		shareCode: 'Share this code with players',
+		waitingForHost: 'Waiting for host...',
 
 		// Game Screen - Controls
 		drawNextBall: 'Draw Next Ball',
@@ -45,6 +60,18 @@ const translations = {
 		// Header
 		title: 'BINGO MASTER',
 		subtitle: 'Simulador Profesional de Bombo',
+
+		// Welcome Screen
+		welcomeTitle: 'Bienvenido a Bingo Master',
+		selectMode: 'Selecciona un modo de juego',
+		hostGame: 'Crear Partida',
+		joinGame: 'Unirse a Partida',
+
+		// Join Screen
+		joinGameTitle: 'Unirse a Partida',
+		roomCodeLabel: 'Código de Sala',
+		joinBtn: 'Unirse',
+		back: 'Volver',
 
 		// Setup Screen
 		setupTitle: 'Configurar Nueva Partida',
@@ -68,6 +95,9 @@ const translations = {
 
 		// Game Screen - Board
 		numberBoard: 'Tablero de Números',
+		roomCode: 'Código de Sala',
+		shareCode: 'Comparte este código con los jugadores',
+		waitingForHost: 'Esperando al anfitrión...',
 
 		// Game Screen - Controls
 		drawNextBall: 'Sacar Siguiente Bola',
