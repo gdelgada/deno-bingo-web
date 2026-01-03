@@ -1,7 +1,7 @@
 import { serveDir } from '@std/http/file-server';
 import { dirname, fromFileUrl, join } from '@std/path';
 
-const PORT = 8000;
+const PORT = parseInt(Deno.env.get('SERVER_PORT') || '8000', 10);
 
 // Get the directory where this server file is located (Windows-safe)
 const serverDir = dirname(fromFileUrl(import.meta.url));

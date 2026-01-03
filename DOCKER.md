@@ -75,19 +75,35 @@ Puedes configurar las siguientes variables de entorno:
 
 | Variable | Descripción | Por defecto |
 |----------|-------------|-------------|
-| `PORT` | Puerto donde escucha el servidor | `8000` |
+| `SERVER_PORT` | Puerto donde escucha el servidor | `8000` |
 | `DENO_ENV` | Entorno de ejecución | `production` |
 
-Ejemplo:
+### Cambiar el Puerto
+
+**Con Docker directo:**
 
 ```bash
-# Cambiar puerto
-docker run -p 3000:3000 -e PORT=3000 bingo:dev
+# Cambiar a puerto 3000
+docker run -p 3000:3000 -e SERVER_PORT=3000 bingo:dev
 
-# Con docker-compose, edita docker-compose.yaml:
-environment:
-  - PORT=3000
+# Cambiar a puerto 80 (requiere permisos)
+docker run -p 80:80 -e SERVER_PORT=80 bingo:dev
 ```
+
+**Con docker-compose:**
+
+Edita `compose.yaml` y modifica ambas secciones (ports y environment):
+
+```yaml
+services:
+  bingo-dev:
+    ports:
+      - "3000:3000"  # HOST:CONTAINER
+    environment:
+      - SERVER_PORT=3000    # Debe coincidir con el puerto del contenedor
+```
+
+**Nota importante**: El puerto del host (primer número) y el puerto de la variable de entorno deben coincidir con el puerto interno del contenedor.
 
 ## 🏥 Health Checks
 

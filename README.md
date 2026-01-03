@@ -41,6 +41,19 @@ deno task dev
 
 Then open your browser at: **http://localhost:8000**
 
+**💡 Custom Port**: You can customize the port using the `SERVER_PORT` environment variable:
+
+```bash
+# Linux/Mac
+SERVER_PORT=3000 deno task dev
+
+# Windows (PowerShell)
+$env:SERVER_PORT=3000; deno task dev
+
+# Windows (CMD)
+set SERVER_PORT=3000 && deno task dev
+```
+
 ### Compile to Executable
 
 To create a standalone executable with all files included:
@@ -107,6 +120,7 @@ deno-bingo-web/
 │   └── app.js          # Game logic
 ├── src/
 │   └── server.ts       # Deno server
+├── .env.example        # Environment variables template
 ├── deno.json           # Deno configuration
 ├── DESIGN.md           # Design documentation
 └── README.md           # This documentation
