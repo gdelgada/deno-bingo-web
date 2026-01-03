@@ -2,7 +2,7 @@
 
 🎱 A modern and elegant web-based graphical interface for the Bingo drum simulator.
 
-![Deno](https://img.shields.io/badge/deno-v2.0-blue)
+![Deno](https://img.shields.io/badge/deno-v2.6.3-blue)
 ![License](https://img.shields.io/badge/license-GPLv3-green)
 
 ## ✨ Features
@@ -41,7 +41,34 @@ deno task dev
 
 Then open your browser at: **http://localhost:8000**
 
-**💡 Custom Port**: You can customize the port using the `SERVER_PORT` environment variable:
+### ⚙️ Configuration
+
+The application supports configuration through environment variables. You can set them directly or use a `.env` file.
+
+#### Using a `.env` file (Recommended)
+
+1. Copy the example file:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Edit `.env` and customize your settings:
+   ```bash
+   # Example .env content
+   SERVER_PORT=3000
+   DENO_ENV=development
+   ```
+
+3. Run the application:
+   ```bash
+   deno task dev
+   ```
+   
+   The `.env` file will be automatically loaded! ✅
+
+#### Using Environment Variables Directly
+
+Alternatively, you can set environment variables directly:
 
 ```bash
 # Linux/Mac
@@ -53,6 +80,16 @@ $env:SERVER_PORT=3000; deno task dev
 # Windows (CMD)
 set SERVER_PORT=3000 && deno task dev
 ```
+
+#### Available Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `SERVER_PORT` | Port where the server listens | `8000` |
+| `DENO_ENV` | Runtime environment (`development` or `production`) | `production` |
+| `PUBLIC_DIR` | Public files directory (optional) | `./public` |
+
+> 📖 For detailed configuration options and advanced usage, see [CONFIGURATION.md](CONFIGURATION.md)
 
 ### Compile to Executable
 

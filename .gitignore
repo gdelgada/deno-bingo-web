@@ -1,7 +1,95 @@
-.vscode/launch.json
+# ====================================
+# Deno Bingo Web - .gitignore
+# ====================================
 
+# ===== Environment Variables =====
 .env
-*.jpg
+.env.local
+.env.*.local
 
-coverage/
+# ===== IDE / Editors =====
+# VSCode
+.vscode/launch.json
+.vscode/*.code-workspace
+.vscode/settings.json
+*.code-workspace
+
+# JetBrains IDEs (WebStorm, IntelliJ, etc.)
+.idea/
+*.iml
+*.iws
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# Vim
+*.swp
+*.swo
+*~
+
+# ===== Operating System Files =====
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# ===== Deno =====
+# Deno cache and generated files
+.deno/
+
+# ===== Build & Output =====
+# Compiled output
 output/
+dist/
+build/
+
+# Coverage reports
+coverage/
+.nyc_output/
+
+# ===== Logs =====
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ===== Temporary Files =====
+*.tmp
+*.temp
+.cache/
+tmp/
+temp/
+
+# ===== Docker =====
+# Local docker volumes (if any)
+.docker/
+
+# ===== Node (if ever needed) =====
+node_modules/
+package-lock.json
+yarn.lock
+
+# ===== Backup Files =====
+*.bak
+*.backup
+*.old
+
+# ===== Test & Debug =====
+.test/
+debug/

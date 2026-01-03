@@ -1,5 +1,15 @@
 import { serveDir } from '@std/http/file-server';
 import { dirname, fromFileUrl, join } from '@std/path';
+import { load } from '@std/dotenv';
+
+// Load environment variables from .env file
+try {
+	await load({ export: true });
+	console.log('✅ Environment variables loaded from .env file');
+} catch {
+	// .env file is optional, continue without it
+	console.log('ℹ️  No .env file found, using system environment variables');
+}
 
 const PORT = parseInt(Deno.env.get('SERVER_PORT') || '8000', 10);
 
