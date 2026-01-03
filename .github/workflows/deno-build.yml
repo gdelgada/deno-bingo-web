@@ -37,9 +37,3 @@ jobs:
 
       - name: Compile
         run: deno task compile
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: bingo-web
-          path: output/bingo-web

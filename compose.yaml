@@ -1,0 +1,42 @@
+services:
+  # Servicio para desarrollo local (build local)
+  bingo-dev:
+    image: bingo:dev
+    build: .
+    container_name: bingo-app-dev
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - DENO_ENV=development
+    stdin_open: true # Equivale a -i
+    tty: true        # Equivale a -t
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "deno", "eval", "fetch('http://localhost:8000').catch(() => Deno.exit(1))"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    profiles:
+      - dev
+
+  # Servicio para producción (pull del registry)
+  bingo-prod:
+    # Cambia esto con tu registry y tag deseado
+    image: ghcr.io/gdelgada/deno-bingo-web:latest
+    container_name: bingo-app-prod
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - DENO_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "deno", "eval", "fetch('http://localhost:8000').catch(() => Deno.exit(1))"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    profiles:
+      - prod

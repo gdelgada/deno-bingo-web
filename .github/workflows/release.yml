@@ -1,0 +1,72 @@
+name: Create Release
+run-name: Create Release 📦
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Trigger en tags de versión (ej: v1.0.0)
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., v1.0.0)'
+        required: true
+        type: string
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write  # Necesario para crear releases
+    
+    steps:
+      - name: Setup deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+          cache: true
+
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Compile for Linux
+        run: deno compile --allow-env --allow-net --allow-read --include public -o bingo-web-linux src/server.ts
+
+      - name: Compile for Windows
+        run: deno compile --target x86_64-pc-windows-msvc --allow-env --allow-net --allow-read --include public -o bingo-web-windows.exe src/server.ts
+
+      - name: Compile for macOS
+        run: deno compile --target x86_64-apple-darwin --allow-env --allow-net --allow-read --include public -o bingo-web-macos src/server.ts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.event.inputs.version || github.ref_name }}
+          name: Release ${{ github.event.inputs.version || github.ref_name }}
+          draft: false
+          prerelease: false
+          files: |
+            bingo-web-linux
+            bingo-web-windows.exe
+            bingo-web-macos
+          body: |
+            ## 🎉 Release ${{ github.event.inputs.version || github.ref_name }}
+            
+            ### 📦 Downloads
+            
+            - **Linux**: `bingo-web-linux`
+            - **Windows**: `bingo-web-windows.exe`
+            - **macOS**: `bingo-web-macos`
+            
+            ### 🚀 How to Use
+            
+            1. Download the appropriate binary for your platform
+            2. Make it executable (Linux/macOS): `chmod +x bingo-web-*`
+            3. Run: `./bingo-web-*` (or `bingo-web-windows.exe` on Windows)
+            4. Open your browser at http://localhost:8000
+            
+            ### 🐳 Docker
+            
+            ```bash
+            docker pull ghcr.io/gdelgada/deno-bingo-web:${{ github.event.inputs.version || github.ref_name }}
+            ```

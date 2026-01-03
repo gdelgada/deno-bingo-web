@@ -1,0 +1,34 @@
+# Git
+.git/
+.github/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+
+# Build artifacts
+output/
+*.exe
+
+# Tests
+tests/
+
+# Documentation
+*.md
+!README.md
+
+# Docker
+Dockerfile
+docker-compose.yaml
+.dockerignore
+
+# Deno cache (se regenerará en el contenedor)
+.deno/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

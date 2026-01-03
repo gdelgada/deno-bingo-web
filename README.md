@@ -53,6 +53,35 @@ The executable will be in `output/bingo-web` (or `bingo-web.exe` on Windows).
 
 > **Note**: The executable includes all HTML, CSS, and JavaScript files. Simply run it and open your browser at http://localhost:8000
 
+### 🐳 Run with Docker
+
+Quick start with Docker:
+
+```bash
+# Development (build local)
+docker-compose --profile dev up -d
+
+# Production (from registry)
+docker-compose --profile prod up -d
+```
+
+**💡 Helper Script**: Usa el script interactivo para gestión fácil:
+
+```bash
+./docker-helper.sh
+```
+
+For detailed instructions on using helper scripts, see [CONTAINER-HELPERS.md](CONTAINER-HELPERS.md).
+
+### 🚀 CI/CD & Deployment
+
+This project includes GitHub Actions workflows for:
+- ✅ Automated testing and compilation
+- 🐳 Docker image building
+- 📦 Deployment to container registry
+
+See [.github/CICD.md](.github/CICD.md) for detailed CI/CD configuration and deployment guides.
+
 ## 🎮 How to Play
 
 1. **Setup**: Enter the number of balls (10-200)
